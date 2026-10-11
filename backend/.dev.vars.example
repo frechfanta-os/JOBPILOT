@@ -1,0 +1,10 @@
+# JobPilot Backend - Local Development Environment Variables (.dev.vars)
+# Copy this file to .dev.vars for local wrangler dev testing.
+# NEVER commit .dev.vars with actual secret values!
+
+OPENROUTER_API_KEY=""
+JWT_SIGNING_SECRET=""
+ADZUNA_APP_ID=""
+ADZUNA_APP_KEY=""
+JOOBLE_API_KEY=""
+GOOGLE_CLIENT_SECRET=""

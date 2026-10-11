@@ -1,0 +1,21 @@
+feature,area,priority,original,clone,notes
+Import CV from Android storage (PDF),profile,must,yes,partial,Scaffolding ready in Phase 2
+Auto-extract qualifications skills and history,profile,must,yes,no,Scheduled for Phase 3
+Structured editable candidate profile,profile,must,yes,partial,ProfileScreen and data model ready
+Job discovery feed for Canada (Job Bank / Adzuna),jobs,must,yes,partial,JobsScreen and feed contract ready
+Job discovery feed for Italy (Adzuna / Jooble),jobs,must,yes,partial,Country filter ready
+Match scoring (0-100) with explainable criteria,matching,must,yes,partial,Algorithm and schema specified
+Identify missing qualifications and risk factors,matching,must,yes,no,Scheduled for Phase 5
+Generate tailored CV draft (no hallucination),documents,must,yes,no,Scheduled for Phase 5
+Generate tailored cover letter draft,documents,must,yes,no,Scheduled for Phase 5
+User review and draft approval gate,applications,must,yes,partial,State machine and endpoint ready
+Application lifecycle tracking (9 states),applications,must,yes,partial,State machine and D1 table ready
+User-assisted application submission packet,applications,must,yes,no,Scheduled for Phase 6
+Anti-duplicate submission constraint,applications,must,yes,yes,Enforced via unique D1 constraints and idempotency
+Read-only Gmail sync for recruiter emails,communications,should,yes,no,Scheduled for Phase 7
+Classify emails (Interview Offer Rejection Info),communications,should,yes,no,Scheduled for Phase 7
+In-app follow-up reminders and deadlines,analytics,should,yes,no,Scheduled for Phase 7
+Application conversion statistics and metrics,analytics,could,yes,partial,Dashboard metrics cards built
+Emergency automation kill switch,security,must,yes,yes,Defined in KV and contracts
+Private cloud document storage with signed URLs,security,must,yes,yes,R2 schema and bucket binding configured
+In-app OTA updates with SHA-256 integrity,deployment,must,yes,yes,Configured in AndroidManifest and CI

@@ -1,0 +1,122 @@
+name: JobPilot Monorepo CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  # ==========================================
+  # JOB 1: FLUTTER ANALYSIS & TESTS
+  # ==========================================
+  flutter-validation:
+    name: Flutter Lint & Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install App Dependencies
+        working-directory: app
+        run: flutter pub get
+
+      - name: Analyze Dart Code
+        working-directory: app
+        run: flutter analyze
+
+      - name: Run Flutter Widget & Unit Tests
+        working-directory: app
+        run: flutter test
+
+  # ==========================================
+  # JOB 2: BACKEND TYPESCRIPT & CONTRACT TESTS
+  # ==========================================
+  backend-validation:
+    name: Backend Lint, Types & Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install Backend Dependencies
+        working-directory: backend
+        run: npm ci || npm install
+
+      - name: TypeScript Type Check
+        working-directory: backend
+        run: npx tsc --noEmit
+
+      - name: Run Backend Contract Tests
+        working-directory: backend
+        run: npm test
+
+  # ==========================================
+  # JOB 3: BUILD VERIFICATION APK
+  # ==========================================
+  build-verification-apk:
+    name: Build Verification APK
+    needs: [flutter-validation, backend-validation]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Verify Package ID Compliance
+        run: |
+          echo "Verifying mandatory package ID: com.ghdinteractivestudio.jobpilot..."
+          grep -q 'namespace = "com.ghdinteractivestudio.jobpilot"' app/android/app/build.gradle.kts || { echo "ERROR: Invalid namespace!"; exit 1; }
+          grep -q 'applicationId = "com.ghdinteractivestudio.jobpilot"' app/android/app/build.gradle.kts || { echo "ERROR: Invalid applicationId!"; exit 1; }
+          echo "✓ Package identifier is fully compliant."
+
+      - name: Install App Dependencies
+        working-directory: app
+        run: flutter pub get
+
+      - name: Build Verification APK (Debug)
+        working-directory: app
+        run: flutter build apk --debug
+
+      - name: Upload Verification APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: jobpilot-verification-apk
+          path: app/build/app/outputs/flutter-apk/app-debug.apk
+          if-no-files-found: error
+          retention-days: 7
