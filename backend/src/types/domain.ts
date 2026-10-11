@@ -46,10 +46,13 @@ export interface CVDocument {
   updated_at: string;
 }
 
+export type JobListingStatus = 'ACTIVE' | 'EXPIRED' | 'UNKNOWN';
+
 export interface JobListing {
   id: string;
   source_id: string;
   source_provider: string;
+  source_attribution: string;
   title: string;
   company_name: string;
   country: CountryCode;
@@ -61,13 +64,41 @@ export interface JobListing {
   salary_max?: number;
   currency: 'CAD' | 'EUR';
   description_raw: string;
+  description_summary?: string;
   required_languages: string[];
   required_skills: string[];
   source_url: string;
   application_url?: string;
   content_hash: string;
+  status: JobListingStatus;
   published_at?: string;
   retrieved_at: string;
+}
+
+export interface JobProviderStatus {
+  name: string;
+  coverage: string;
+  status: 'ACTIVE' | 'BLOCKED' | 'NOT_CONFIGURED' | 'FAILED';
+  reason?: string;
+  last_sync_at?: string;
+}
+
+export interface JobSearchQuery {
+  country?: CountryCode | 'ALL';
+  query?: string;
+  location?: string;
+  isRemote?: boolean;
+  page?: number;
+  limit?: number;
+}
+
+export interface JobSearchResponse {
+  items: JobListing[];
+  total: number;
+  page: number;
+  limit: number;
+  has_more: boolean;
+  source_providers: JobProviderStatus[];
 }
 
 export interface MatchAssessment {

@@ -49,8 +49,8 @@ export default {
           return applyCorsHeaders(response);
         }
 
-        // Route: /api/v1/jobs or /api/v1/jobs/search
-        if (pathname === '/api/v1/jobs' || pathname === '/api/v1/jobs/search') {
+        // Route: /api/v1/jobs*
+        if (pathname === '/api/v1/jobs' || pathname.startsWith('/api/v1/jobs/')) {
           const response = await handleJobs(request, env, user, correlationId);
           return applyCorsHeaders(response);
         }

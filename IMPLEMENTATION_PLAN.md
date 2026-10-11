@@ -4,9 +4,9 @@
 > **Official Remote**: `https://github.com/frechfanta-os/JOBPILOT`  
 > **Application Package ID**: `com.ghdinteractivestudio.jobpilot`  
 > **Methodology**: Replica Skills Framework (`recon`, `architect`, `design`, `build`, `backend`, `test`, `diff`, `brand`, `deploy`)  
-> **Current Phase**: Phase 3 Complete (CV Parsing & Structured Profile)  
-> **Status**: Phase 3 Validated (Offline PDF Extraction, Structured Profile Review, Cryptographic JWT Auth & Private CV Storage) — Awaiting Phase 4 Authorization  
-> **Timestamp**: 2026-10-11T16:30:00Z  
+> **Current Phase**: Phase 4 Complete (Multi-Source Job Discovery — Canada & Italy)  
+> **Status**: Phase 4 Validated (Live Public Adapters, Deduplication, D1 Storage, Filters, Transparency Disclosures, 30 Backend + 15 Flutter Tests Green) — Awaiting Phase 5 Authorization  
+> **Timestamp**: 2026-10-11T20:30:00Z  
 
 ---
 
@@ -143,8 +143,17 @@ flowchart LR
   - Cryptographic backend authentication upgrade: HMAC-SHA256 JWT verification using Web Crypto API (`crypto.subtle`) with expiration and anti-tampering guards.
   - Secure CV document management API (`/api/v1/documents/cv*`) with Cloudflare R2 private bucket storage and D1 metadata indexing, enforcing strict multi-tenant isolation.
   - Automated testing: 9 Flutter unit/widget tests + 14 backend TypeScript integration tests (100% pass rate).
-- **Phase 4 (Multi-Source Job Discovery)**: PENDING. Strict gate in place; no work on Phase 4 will begin until user review and authorization.
+- **Phase 4 (Multi-Source Job Discovery — Canada & Italy)**: COMPLETED and verified.
+  - Multi-provider adapter architecture (`JobSourceAdapter`): live public adapters (Remotive, Arbeitnow) + commercial adapters (Adzuna, Jooble) with honest status reporting.
+  - Live discovery verified without synthetic data: Remotive (Canada/Remote, CAD) and Arbeitnow (Italy/Europe, EUR).
+  - Unconfigured enterprise sources (Adzuna CA/IT, Jooble) honestly reported as `BLOCKED` in API and UI until developer credentials are provided.
+  - Robust deduplication pipeline via deterministic SHA-256 fingerprinting (`normalized_company|normalized_title|country|city`) and composite database index.
+  - D1 versioned migration `0002_job_discovery.sql` with idempotent upsert (`INSERT ... ON CONFLICT(content_hash) DO UPDATE ...`).
+  - Backend API (`/api/v1/jobs*`): query validation, page size capping (max 50), input sanitization, and single job detail retrieval.
+  - Flutter UI (`JobsScreen`, `JobCard`, `JobDetailSheet`): Country selector (CA, IT, ALL), keyword search, Remote-only filter, pull-to-refresh, transparent provider status disclosure, external application link launcher (`url_launcher`).
+  - Automated test coverage: 30/30 backend integration tests + 15/15 Flutter unit and widget tests passing (100% pass rate).
+- **Phase 5 (AI Matching & Tailored Documents)**: PENDING. Strict gate in place; no work on Phase 5 will begin until user review and authorization.
 
 ---
 
-*Master Implementation Plan updated for Phase 3 completion.*
+*Master Implementation Plan updated for Phase 4 completion.*

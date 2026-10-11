@@ -40,6 +40,8 @@ dependencies:
   intl: ^0.20.3
   file_picker: ^13.1.0
   syncfusion_flutter_pdf: ^35.1.39
+  url_launcher: ^6.3.3
+  http: ^1.6.0
 
 dev_dependencies:
   flutter_test:
