@@ -3,6 +3,7 @@ import { handleCors, applyCorsHeaders } from './middleware/cors.js';
 import { authenticateRequest } from './middleware/auth.js';
 import { handleHealthCheck } from './routes/health.js';
 import { handleProfile } from './routes/profile.js';
+import { handleDocuments } from './routes/documents.js';
 import { handleJobs } from './routes/jobs.js';
 import { handleApplications } from './routes/applications.js';
 import { createErrorResponse } from './types/api.js';
@@ -29,7 +30,7 @@ export default {
 
       // 3. Authenticated Routes Boundary
       if (pathname.startsWith('/api/v1/')) {
-        const auth = await authenticateRequest(request, correlationId);
+        const auth = await authenticateRequest(request, env, correlationId);
         if (auth.errorResponse) {
           return applyCorsHeaders(auth.errorResponse);
         }
@@ -39,6 +40,12 @@ export default {
         // Route: /api/v1/profile
         if (pathname === '/api/v1/profile') {
           const response = await handleProfile(request, env, user, correlationId);
+          return applyCorsHeaders(response);
+        }
+
+        // Route: /api/v1/documents/cv*
+        if (pathname.startsWith('/api/v1/documents/cv')) {
+          const response = await handleDocuments(request, env, user, correlationId);
           return applyCorsHeaders(response);
         }
 
