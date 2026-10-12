@@ -4,7 +4,9 @@ import { authenticateRequest } from './middleware/auth.js';
 import { handleHealthCheck } from './routes/health.js';
 import { handleProfile } from './routes/profile.js';
 import { handleDocuments } from './routes/documents.js';
+import { handleTailoredDocuments } from './routes/tailored_documents.js';
 import { handleJobs } from './routes/jobs.js';
+import { handleMatches } from './routes/matches.js';
 import { handleApplications } from './routes/applications.js';
 import { createErrorResponse } from './types/api.js';
 
@@ -43,9 +45,21 @@ export default {
           return applyCorsHeaders(response);
         }
 
+        // Route: /api/v1/documents/tailored*
+        if (pathname.startsWith('/api/v1/documents/tailored')) {
+          const response = await handleTailoredDocuments(request, env, user, correlationId);
+          return applyCorsHeaders(response);
+        }
+
         // Route: /api/v1/documents/cv*
         if (pathname.startsWith('/api/v1/documents/cv')) {
           const response = await handleDocuments(request, env, user, correlationId);
+          return applyCorsHeaders(response);
+        }
+
+        // Route: /api/v1/matches*
+        if (pathname.startsWith('/api/v1/matches')) {
+          const response = await handleMatches(request, env, user, correlationId);
           return applyCorsHeaders(response);
         }
 

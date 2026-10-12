@@ -152,8 +152,17 @@ flowchart LR
   - Backend API (`/api/v1/jobs*`): query validation, page size capping (max 50), input sanitization, and single job detail retrieval.
   - Flutter UI (`JobsScreen`, `JobCard`, `JobDetailSheet`): Country selector (CA, IT, ALL), keyword search, Remote-only filter, pull-to-refresh, transparent provider status disclosure, external application link launcher (`url_launcher`).
   - Automated test coverage: 30/30 backend integration tests + 15/15 Flutter unit and widget tests passing (100% pass rate).
-- **Phase 5 (AI Matching & Tailored Documents)**: PENDING. Strict gate in place; no work on Phase 5 will begin until user review and authorization.
+- **Phase 5 (AI Matching & Tailored Documents)**: COMPLETED and verified.
+  - Explainable Matching Engine with reproducible deterministic scoring (Skills 40%, Experience 25%, Education 15%, Language 10%, Location 10%).
+  - Zero hallucination guarantee: 100% grounded in user-confirmed profile facts; never invents skills, experiences, education, dates, or credentials.
+  - Explicit work authorization compatibility evaluation for Canada (`CITIZEN`, `PERMANENT_RESIDENT`, `WORK_PERMIT`, `NEED_SPONSORSHIP`, `UNKNOWN`) and Italy (`CITIZEN`, `EU_CITIZEN`, `PERMESSO_DI_SOGGIORNO`, `NEED_SPONSORSHIP`, `UNKNOWN`). Unknown statuses are recorded in `unverified_requirements` without disqualifying candidates.
+  - Qualitative evidence synthesis via OpenRouter (`openai/gpt-4o-mini`) with PII redaction (email, phone, address), XML delimiter injection defense, and resilient offline deterministic fallback.
+  - ATS-friendly tailored CV and Cover Letter generator with multilingual support for English, French, and Italian (`en`, `fr`, `it`).
+  - D1 versioned migration `0003_match_and_tailored_docs.sql` and API endpoints (`/api/v1/matches*`, `/api/v1/documents/tailored*`) enforcing strict multi-tenant isolation, version numbering (`version_number`), draft editing, and candidate approval state machine (`DRAFT` -> `REVIEWED` -> `APPROVED`).
+  - Flutter UI: `MatchScoreCard` in `JobDetailSheet` displaying score gauge, category progress bars, matched & missing skills chips, and modal breakdown; `TailoredDocumentScreen` supporting document type/language toggles, draft editing, and explicit candidate approval confirmation.
+  - Automated test coverage: 40/40 backend TypeScript tests + 22/22 Flutter unit/widget tests passing (100% pass rate).
+- **Phase 6 (Application Tracking & Assisted Submissions)**: PENDING. Strict gate in place; no work on Phase 6 or submission automations will begin until user review and authorization.
 
 ---
 
-*Master Implementation Plan updated for Phase 4 completion.*
+*Master Implementation Plan updated for Phase 5 completion.*

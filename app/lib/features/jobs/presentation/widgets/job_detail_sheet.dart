@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../domain/job_listing.dart';
+import '../../../matching/presentation/widgets/match_score_card.dart';
 
 class JobDetailSheet extends StatelessWidget {
   final JobListing job;
@@ -157,7 +158,11 @@ class JobDetailSheet extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 14),
+
+              // AI Compatibility & Tailored Documents
+              MatchScoreCard(job: job),
+              const SizedBox(height: 14),
 
               const Divider(height: 1),
               const SizedBox(height: 12),
